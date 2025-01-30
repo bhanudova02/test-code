@@ -10,9 +10,8 @@ const Login = () => {
   function handleLogin() {
     axios.post('http://localhost:5000/api/auth/login', user)
       .then(response => {
-        localStorage.setItem('token', response.data.token); // Store the JWT token
-        console.log('Login successful:', response.data);
-        // You can now redirect the user to the homepage or a protected route
+        console.log('Login successful:', response.data.msg);
+        // Redirect to home page or other protected route
       })
       .catch(error => {
         console.error('Error logging in:', error.response?.data?.msg || error.message);

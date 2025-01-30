@@ -11,8 +11,8 @@ const SignUp = () => {
   function handleSignUp() {
     axios.post('http://localhost:5000/api/auth/signup', user)
       .then(response => {
-        console.log('SignUp successful:', response.data);
-        // You can redirect the user to the login page after successful signup
+        console.log('SignUp successful:', response.data.msg);
+        // Redirect to login page after successful signup
       })
       .catch(error => {
         console.error('Error signing up:', error.response?.data?.msg || error.message);
