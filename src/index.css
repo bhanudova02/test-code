@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+/* For the left container (parallelogram on the left side) */
+.clip-path-left {
+  clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 0% 100%);
+  width: 100%;
+  height: 100%;
+}
+
+/* For the right container (parallelogram on the right side) */
+.clip-path-right {
+  clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
+  width: 100%;
+  height: 100%;
+}
