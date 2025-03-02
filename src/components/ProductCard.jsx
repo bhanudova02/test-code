@@ -1,38 +1,36 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 
-export function ProductCard({ data }) {
-    const [prodData, setProdData] = useState([{}])
+export function ProductCard() {
+    const [prodData, setProdData] = useState([]);
+    const [originalData, setOriginalData] = useState([]);
 
+    useEffect(() => {
+        fetch("http://127.0.0.1:5000/products")
+            .then(res => res.json())
+            .then(data => {
+                setProdData(data);
+                setOriginalData(data);
+            });
+    }, []);
 
     function handlePriceClick(price) {
-        const priceData = data.filter((mobile) => mobile.price === price);
-        console.log("Filtered Products:", priceData);
-        setProdData(priceData)
+        const priceData = originalData.filter((mobile) => mobile.price === price);
+        setProdData(priceData);
     }
 
     function handelMaterialClick(material) {
-        const optList = data.filter((optList) => optList.Material === material);
-        console.log("Filtered Products:", optList);
-        setProdData(optList)
+        const filteredData = originalData.filter((mobile) => mobile.Material === material);
+        setProdData(filteredData);
     }
-
 
     function handelSearchClick(e) {
         const query = e.target.value.toLowerCase();
-        const searchData = data.filter((optList) =>
-            optList.title.toLowerCase().includes(query)
+        const searchData = originalData.filter((mobile) =>
+            mobile.title.toLowerCase().includes(query)
         );
-        setProdData(searchData)
-        console.log(searchData)
+        setProdData(searchData);
     }
-
-
-    useEffect(() => {
-        setProdData(data)
-    }, [])
-
-
 
     return (
         <div className="px-6 py-20 bg-amber-50/90">
@@ -42,7 +40,7 @@ export function ProductCard({ data }) {
                     <div>
                         <h4 className="font-semibold text-lg text-green-900 h-full md:h-[30px]">Select Price</h4>
                         <ul className="flex items-center gap-1 h-[34px]">
-                            {data.map((mobile, index) => (
+                            {originalData.map((mobile, index) => (
                                 <li
                                     key={index}
                                     onClick={() => handlePriceClick(mobile.price)}
@@ -59,7 +57,7 @@ export function ProductCard({ data }) {
                             onChange={(e) => handelMaterialClick(e.target.value)}
                             className="bg-white shadow shadow-black py-1.5 px-2 rounded w-full"
                         >
-                            {data[0].Material_List.map((material, index) => (
+                            {prodData[0]?.Material_List.map((material, index) => (
                                 <option key={index} value={material}>
                                     {material}
                                 </option>
@@ -67,10 +65,13 @@ export function ProductCard({ data }) {
                         </select>
                     </div>
                     <div>
-                    <h6 className="font-semibold text-base h-full md:h-[30px]">Select Product</h6>
-
+                        <h6 className="font-semibold text-base h-full md:h-[30px]">Select Product</h6>
                         <div className="flex flex-row justify-center items-center relative w-full md:w-[400px]">
-                            <input onKeyUp={handelSearchClick} type="text" className="border border-gray-500 p-1 rounded-2xl ps-4 pe-8 w-full" />
+                            <input 
+                                onKeyUp={handelSearchClick} 
+                                type="text" 
+                                className="border border-gray-500 p-1 rounded-2xl ps-4 pe-8 w-full" 
+                            />
                             <button className="p-1 absolute right-3 mt-1 cursor-pointer">
                                 <CiSearch className="text-lg" />
                             </button>
@@ -82,7 +83,7 @@ export function ProductCard({ data }) {
                 {prodData.map((mobile, index) => (
                     <div key={index} className="bg-white shadow-sm shadow-black rounded-lg p-4">
                         <div className="flex items-center justify-center">
-                            <img src={mobile.img_src} alt={mobile.img_src} width="100%" className="w-40" />
+                            <img src={mobile.img_src} alt={mobile.title} width="100%" className="w-40" />
                         </div>
                         <div className="px-1.5">
                             <div className="mt-1 h-[80px] ">
@@ -91,7 +92,9 @@ export function ProductCard({ data }) {
                             <div>
                                 <h5 className="font-semibold">Price: <span>₹{mobile.price}</span></h5>
                             </div>
-                            <button className="bg-blue-900 text-white px-4 w-full py-1.5 font-semibold rounded-md mt-2">Quick View</button>
+                            <button className="bg-blue-900 text-white px-4 w-full py-1.5 font-semibold rounded-md mt-2">
+                                Quick View
+                            </button>
                         </div>
                     </div>
                 ))}
